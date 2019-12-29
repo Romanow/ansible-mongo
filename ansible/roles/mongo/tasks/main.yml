@@ -1,0 +1,4 @@
+---
+# file: roles/mongo/main.yml
+- debug:
+    msg: "install mongo"
