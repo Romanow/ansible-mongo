@@ -5,7 +5,6 @@ echo "ansible ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ansible
 sudo -u ansible mkdir /home/ansible/.ssh
 usermod --shell /bin/bash ansible
 
-# bug https://github.com/hashicorp/vagrant/issues/10914
 apt-get update --yes
 apt install software-properties-common python3-pip --yes
 pip3 install --upgrade pip

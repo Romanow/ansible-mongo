@@ -1,0 +1,4 @@
+---
+# file: inventories/group_vars/mongo/vars.yml
+mongodb:
+  version: 4.2

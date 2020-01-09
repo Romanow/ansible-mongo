@@ -1,3 +1,4 @@
 *.log
 .idea
 .vagrant
+.vault_pass
