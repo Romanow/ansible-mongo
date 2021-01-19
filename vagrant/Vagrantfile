@@ -1,27 +1,30 @@
 # -*- mode: ruby -*-
 
-servers=[
-  {
-    :hostname => "mongo-master",
-    :ip => "192.168.50.50",
-    :box => "romanow/ansible-box",
-    :ram => 1024,
-    :cpu => 1
-  },
-  {
-    :hostname => "mongo-slave",
-    :ip => "192.168.50.51",
-    :box => "romanow/ansible-box",
-    :ram => 1024,
-    :cpu => 1
-  },
-  {
-      :hostname => "arbiter",
-      :ip => "192.168.50.52",
-      :box => "romanow/ansible-box",
-      :ram => 512,
-      :cpu => 1
-  }
+servers = [
+    {
+        :hostname => "master",
+        :ip => "192.168.54.10",
+        :box => "romanow/ansible-box",
+        :version => "20.04",
+        :ram => 1024,
+        :cpu => 1
+    },
+    {
+        :hostname => "slave1",
+        :ip => "192.168.54.11",
+        :box => "romanow/ansible-box",
+        :version => "20.04",
+        :ram => 1024,
+        :cpu => 1
+    },
+    {
+        :hostname => "slave2",
+        :ip => "192.168.54.12",
+        :box => "romanow/ansible-box",
+        :version => "20.04",
+        :ram => 1024,
+        :cpu => 1
+    }
 ]
 
 Vagrant.configure(2) do |config|
@@ -31,8 +34,9 @@ Vagrant.configure(2) do |config|
   servers.each do |machine|
     config.vm.define machine[:hostname] do |node|
       node.vm.box = machine[:box]
+      node.vm.box_version = machine[:version]
       node.vm.hostname = machine[:hostname]
-      node.vm.network :private_network, ip: machine[:ip]
+      node.vm.network "private_network", ip: machine[:ip]
 
       config.vm.provider "virtualbox" do |vm|
         vm.memory = machine[:ram]
@@ -40,6 +44,7 @@ Vagrant.configure(2) do |config|
       end
     end
 
+    config.vm.provision :shell,inline: "sed 's/127\.0\.1\.1.*/#{machine[:ip]}    #{machine[:hostname]}/' -i /etc/hosts"
     config.vm.provision "shell" do |s|
       ssh_pub_key = File.readlines("#{Dir.home}/.ssh/id_rsa.pub").first.strip
       s.inline = <<-SHELL

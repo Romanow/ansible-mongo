@@ -1,0 +1,20 @@
+---
+# file: inventories/local/group_vars/static.yml
+all:
+  hosts:
+    mongodb_master:
+      ansible_host: "192.168.54.10"
+    mongodb_slave1:
+      ansible_host: "192.168.54.11"
+    mongodb_slave2:
+      ansible_host: "192.168.54.12"
+  children:
+    mongodb:
+      children:
+        master:
+          hosts:
+            master:
+        slave:
+          hosts:
+            slave1:
+            slave2:
