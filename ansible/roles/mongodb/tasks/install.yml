@@ -1,5 +1,5 @@
 ---
-# file: roles/mongo/main.yml
+# file: roles/mongodb/tasks/install.yml
 - name: Add MongoDB repository key
   become: yes
   apt_key:
@@ -9,7 +9,7 @@
 - name: Add MongoDB repository
   become: yes
   apt_repository:
-    repo: "deb https://repo.mongodb.org/apt/ubuntu {{ ansible_distribution_release }}/mongodb-org/{{ mongodb.version }} multiverse"
+    repo: "deb [arch=amd64] https://repo.mongodb.org/apt/ubuntu {{ ansible_distribution_release }}/mongodb-org/{{ mongodb.version }} multiverse"
     state: present
 
 - name: Install MongoDB

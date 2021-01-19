@@ -1,4 +1,20 @@
 ---
-# file: inventories/group_vars/mongo/vars.yml
-mongodb:
-  version: 4.2
+# file: inventories/group_vars/mongodb/vars.yml
+firewall:
+  enabled: true
+  rules:
+    - { port: "27017", direction: "in", protocol: "tcp", policy: "allow", description: "MongoDB" }
+
+admin:
+  name: superuser
+  password: "{{ vault_admin_passwd }}"
+  roles:
+    - dbAdminAnyDatabase
+    - userAdminAnyDatabase
+
+users:
+  - name: program
+    password: "{{ vault_program_passwd }}"
+    database: mongodb_example
+    roles:
+      - dbOwner

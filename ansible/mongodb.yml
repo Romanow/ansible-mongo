@@ -1,0 +1,5 @@
+---
+# file: mongodb.yml
+- hosts: "all"
+  roles:
+    - mongodb

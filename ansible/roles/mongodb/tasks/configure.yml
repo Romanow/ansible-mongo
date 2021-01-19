@@ -1,0 +1,55 @@
+---
+# file: roles/mongodb/tasks/configure.yml
+- name: Configure MongoDB
+  become: yes
+  template:
+    src: mongod.conf.j2
+    dest: /etc/mongod.conf
+    owner: "{{ mongodb.user }}"
+    group: "{{ mongodb.group }}"
+    mode: 0644
+  notify: restart mongod
+  vars:
+    security: false
+  tags: configure
+
+- name: Configure logrotate
+  become: yes
+  template:
+    src: logrotate.conf.j2
+    dest: /etc/logrotate.d/mongodb
+  tags: configure
+
+- name: Check if admin already configured
+  stat:
+    path: "{{ home_dir}}/.mongo_admin"
+  register: mongo_admin_executed
+  tags: configure
+
+- block:
+    - name: Create admin user
+      community.mongodb.mongodb_user:
+        database: admin
+        name: "{{ admin.name }}"
+        password: "{{ admin.password }}"
+        state: present
+        roles: "{{ admin.roles }}"
+    - name: Mark admin already created
+      file:
+        path: "{{ home_dir}}/.mongo_admin"
+        state: touch
+  when: not mongo_admin_executed.stat.exists
+  tags: configure
+
+- name: Create users
+  community.mongodb.mongodb_user:
+    login_user: "{{ admin.name }}"
+    login_password: "{{ admin.password }}"
+    database: admin
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    roles: "{{ item.roles }}"
+    state: present
+  with_items:
+    - "{{ users }}"
+  tags: configure

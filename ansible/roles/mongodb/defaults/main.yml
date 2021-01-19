@@ -1,0 +1,10 @@
+---
+# file: roles/mongodb/defaults/main.yml
+home_dir: /home/ansible
+mongodb:
+  version: 4.4
+  port: 27017
+  user: mongodb
+  group: mongodb
+  data_path: /var/lib/mongodb/
+  log_path: /var/log/mongodb/

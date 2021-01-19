@@ -13,8 +13,8 @@ all:
       children:
         master:
           hosts:
-            master:
+            mongodb_master:
         slave:
           hosts:
-            slave1:
-            slave2:
+            mongodb_slave1:
+            mongodb_slave2:

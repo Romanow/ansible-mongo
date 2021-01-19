@@ -1,5 +1,5 @@
 ---
-# file: tasks/mongo/handlers/main.yml
+# file: tasks/mongodb/handlers/main.yml
 - name: restart mongod
   become: yes
   service:

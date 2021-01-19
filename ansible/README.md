@@ -11,6 +11,10 @@
     ```shell script
     pip install -r requirements.txt
     ```
+1. Установить дополнительные коллекции ansible:
+    ```shell script
+    ansible-galaxy install -r galaxy.yml
+    ```
    
 ### Запуск playbook
 ```shell script
