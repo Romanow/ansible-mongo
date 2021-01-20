@@ -16,3 +16,7 @@ systemLog:
 
 security:
   authorization: enabled
+  keyFile: {{ mongodb.key_file }}
+
+replication:
+  replSetName: {{ replicaSetName }}

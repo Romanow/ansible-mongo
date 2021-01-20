@@ -1,5 +1,31 @@
 ---
 # file: roles/mongodb/tasks/configure.yml
+- name: Configure key file
+  block:
+    - name: Check if keyfile already created
+      stat:
+        path: "{{ mongodb.key_file }}"
+      register: keyfile_created
+
+    - name: Generate keyfile
+      shell: openssl rand -base64 756
+      register: encrypted_result
+      run_once: yes
+      when: not keyfile_created.stat.exists
+      tags: configure
+
+    - name: Write key to file
+      become: yes
+      copy:
+        content: "{{ encrypted_result.stdout }}"
+        dest: "{{ mongodb.key_file }}"
+        owner: "{{ mongodb.user }}"
+        group: "{{ mongodb.group }}"
+        mode: "0400"
+        remote_src: yes
+      when: not keyfile_created.stat.exists
+  tags: configure
+
 - name: Configure MongoDB
   become: yes
   template:
@@ -7,10 +33,8 @@
     dest: /etc/mongod.conf
     owner: "{{ mongodb.user }}"
     group: "{{ mongodb.group }}"
-    mode: 0644
+    mode: "0644"
   notify: restart mongod
-  vars:
-    security: false
   tags: configure
 
 - name: Configure logrotate
@@ -20,36 +44,35 @@
     dest: /etc/logrotate.d/mongodb
   tags: configure
 
-- name: Check if admin already configured
-  stat:
-    path: "{{ home_dir}}/.mongo_admin"
-  register: mongo_admin_executed
-  tags: configure
-
 - block:
     - name: Create admin user
       community.mongodb.mongodb_user:
+        login_user: "{{ admin.name }}"
+        login_password: "{{ admin.password }}"
         database: admin
         name: "{{ admin.name }}"
         password: "{{ admin.password }}"
         state: present
         roles: "{{ admin.roles }}"
-    - name: Mark admin already created
-      file:
-        path: "{{ home_dir}}/.mongo_admin"
-        state: touch
-  when: not mongo_admin_executed.stat.exists
-  tags: configure
 
-- name: Create users
-  community.mongodb.mongodb_user:
-    login_user: "{{ admin.name }}"
-    login_password: "{{ admin.password }}"
-    database: admin
-    name: "{{ item.name }}"
-    password: "{{ item.password }}"
-    roles: "{{ item.roles }}"
-    state: present
-  with_items:
-    - "{{ users }}"
+    - name: Create users
+      community.mongodb.mongodb_user:
+        login_user: "{{ admin.name }}"
+        login_password: "{{ admin.password }}"
+        database: "{{ item.database }}"
+        name: "{{ item.name }}"
+        password: "{{ item.password }}"
+        roles: "{{ item.roles }}"
+        state: present
+      with_items:
+        - "{{ users }}"
+
+    - name: Create ReplicaSet rs0
+      community.mongodb.mongodb_replicaset:
+        login_user: "{{ admin.name }}"
+        login_password: "{{ admin.password }}"
+        replica_set: "{{ replicaSetName }}"
+        members: "{{ members }}"
+      when: replicaSetName is defined
+  when: "'primary' in group_names"
   tags: configure

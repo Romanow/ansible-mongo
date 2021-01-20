@@ -11,6 +11,10 @@ admin:
   roles:
     - dbAdminAnyDatabase
     - userAdminAnyDatabase
+    - readWriteAnyDatabase
+    - clusterAdmin
+    - restore
+    - backup
 
 users:
   - name: program
