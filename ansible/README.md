@@ -13,7 +13,7 @@
     ```
 1. Установить дополнительные коллекции ansible:
     ```shell script
-    ansible-galaxy install -r galaxy.yml
+    ansible-galaxy install -r galaxy.yml -p roles
     ```
    
 ### Запуск playbook
