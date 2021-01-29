@@ -1,3 +1,4 @@
 ---
-# file: inventories/group_vars/primary.yml
+# file: inventories/host_vars/primary.yml
+mongodb_master_node: yes
 mongodb_replica_set_members: "{{ groups.mongodb | map('extract', hostvars, 'ansible_host') | product(['27017']) | map('join', ':') }}"

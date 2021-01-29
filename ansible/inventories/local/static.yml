@@ -2,19 +2,19 @@
 # file: inventories/local/group_vars/static.yml
 all:
   hosts:
-    mongodb_primary:
+    primary:
       ansible_host: "192.168.54.10"
-    mongodb_secondary1:
+    secondary1:
       ansible_host: "192.168.54.11"
-    mongodb_secondary2:
+    secondary2:
       ansible_host: "192.168.54.12"
   children:
     mongodb:
       children:
         primary:
           hosts:
-            mongodb_primary:
+            primary:
         secondary:
           hosts:
-            mongodb_secondary1:
-            mongodb_secondary2:
+            secondary1:
+            secondary2:

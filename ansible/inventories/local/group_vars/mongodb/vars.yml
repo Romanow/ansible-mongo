@@ -5,6 +5,8 @@ firewall:
   rules:
     - { port: "27017", direction: "in", protocol: "tcp", policy: "allow", description: "MongoDB" }
 
+mongodb_master_node: no
+
 admin:
   name: superuser
   password: "{{ vault_admin_passwd }}"
