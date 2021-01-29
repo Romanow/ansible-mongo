@@ -7,8 +7,7 @@ galaxy_info:
   platforms:
     - name: Ubuntu
       versions:
-        - 18.04
+        - 20.04
 allow_duplicates: false
 dependencies:
-  - basic
-  - firewall
+  - galaxy-mongodb

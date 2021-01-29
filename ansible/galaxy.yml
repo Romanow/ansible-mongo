@@ -1,4 +1,8 @@
 ---
-# file: galaxy.yml
+roles:
+  - name: galaxy-mongodb
+    src: https://github.com/Romanow/ansible-mongodb-role
+    version: master
+
 collections:
   - community.mongodb

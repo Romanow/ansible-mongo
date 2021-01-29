@@ -1,0 +1,4 @@
+---
+# file: roles/mongodb/vars/main.yml
+mongodb_replica_set_enabled: yes
+mongodb_replica_set_name: rs0

@@ -2,4 +2,6 @@
 # file: mongodb.yml
 - hosts: "all"
   roles:
+    - basic
+    - firewall
     - mongodb

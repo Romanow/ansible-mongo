@@ -9,12 +9,7 @@ admin:
   name: superuser
   password: "{{ vault_admin_passwd }}"
   roles:
-    - dbAdminAnyDatabase
-    - userAdminAnyDatabase
-    - readWriteAnyDatabase
-    - clusterAdmin
-    - restore
-    - backup
+    - root
 
 users:
   - name: program
